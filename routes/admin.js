@@ -2,35 +2,23 @@ const path = require('path');
 
 const express = require('express');
 
-const { body } = require('express-validator/check');
+const router = express.Router();
 
 const adminController = require('../controllers/admin');
 
-const isAuth = require('../middleware/is-auth');
-
-const router = express.Router();
-
 // /admin/add-product => GET
-router.get('/add-product', isAuth,  adminController.getAddproduct);
+router.get('/add-product', adminController.getAddproduct);
 
 // /admin/product => GET
-router.get('/products', isAuth, adminController.getProducts);
+router.get('/products', adminController.getProducts);
 
 // /admin/add-product => POST
-router.post('/add-product', [
-body('title').isString().isLength({min: 5}).withMessage('Title should be minimum length of 5, and is Alphanumeric.'),
-body('price').isFloat().withMessage('Price must be decimal.'),
-body('description').isAlpha().isLength({min: 5, max: 200}) ],
-isAuth, adminController.postAddproduct);
+router.post('/add-product', adminController.postAddproduct);
 
-router.get('/edit-product/:productId', isAuth, adminController.getEditproduct);
+router.get('/edit-product/:productId', adminController.getEditproduct);
 
-router.post('/edit-product', [
-body('title').isString().isLength({min: 5}).withMessage('Title should be minimum length of 5, and is Alphanumeric.'),
-body('price').isFloat().withMessage('Price must be decimal.'),
-body('description').isAlpha().isLength({min: 5, max: 200}) ],
-isAuth, adminController.postEditproduct);
+router.post('/edit-product', adminController.postEditproduct);
 
-router.delete('/product/:productId', isAuth, adminController.deleteProduct);
+router.post('/delete-product', adminController.postDeleteProduct);
 
 module.exports = router;
